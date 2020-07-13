@@ -1,23 +1,26 @@
 #!/bin/bash
 shopt -s expand_aliases
-source .gcloud/util.sh
 
-export BUCKET=${PROJECT_ID}-media
+stepdo() { echo "→ ${1}..." }
+function quiet { $* > /dev/null }
 
-gcloud config set project $PROJECT_ID
+export BUCKET=${GOOGLE_CLOUD_PROJECT}-media
+export SA_EMAIL=${K_SERVICE}@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
+
+gcloud config set project $GOOGLE_CLOUD_PROJECT
 gcloud config set run/platform managed
-gcloud config set run/region $REGION
+gcloud config set run/region $GOOGLE_CLOUD_REGION
 
-stepdo "Creating dedicated service account for $SERVICE_NAME"
-gcloud iam service-accounts create $SERVICE_NAME \
-  --display-name "$SERVICE_NAME service account"
-quiet gcloud projects add-iam-policy-binding $PROJECT_ID \
+stepdo "Creating dedicated service account for $K_SERVICE"
+gcloud iam service-accounts create $K_SERVICE \
+  --display-name "$K_SERVICE service account"
+quiet gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
     --member serviceAccount:$SA_EMAIL \
     --role roles/run.admin
 stepdone
 
 stepdo "Create Storage bucket"
-gsutil mb -l ${REGION} gs://${BUCKET}
+gsutil mb -l ${GOOGLE_CLOUD_REGION} gs://${BUCKET}
 gsutil iam ch serviceAccount:${SA_EMAIL}:roles/storage.objectAdmin gs://${BUCKET}
 stepdone
 
