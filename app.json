@@ -1,0 +1,6 @@
+{ "name": "badge-receiver",
+  "hooks": {
+    "prebuild":   { "commands": [".gcloud/pre-build.sh"]   },
+    "postcreate": { "commands": [".gcloud/post-create.sh"] }
+  }
+}

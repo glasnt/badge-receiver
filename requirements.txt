@@ -1,0 +1,4 @@
+Flask
+httpx
+gunicorn
+google-cloud-storage
