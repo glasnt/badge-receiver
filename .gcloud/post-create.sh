@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s expand_aliases
+source .gcloud/util.sh
 
-source util.sh
 export SERVICE_URL=$(gcloud run services describe $SERVICE --format "value(status.url)")
 
 stepdo "Assigning service account to service"

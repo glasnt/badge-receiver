@@ -1,7 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
-
-source util.sh
+source .gcloud/util.sh
 
 export BUCKET=${PROJECT_ID}-media
 
