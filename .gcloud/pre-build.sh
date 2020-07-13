@@ -20,6 +20,8 @@ stepdone(){
 export BUCKET=${GOOGLE_CLOUD_PROJECT}-media
 export SA_EMAIL=${K_SERVICE}@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
 
+echo "🚀 Running pre-build provisioning steps for deploying $K_SERVICE to $GOOGLE_CLOUD_PROJECT in $GOOGLE_CLOUD_REGION"
+
 gcloud config set project $GOOGLE_CLOUD_PROJECT
 gcloud config set run/platform managed
 gcloud config set run/region $GOOGLE_CLOUD_REGION
