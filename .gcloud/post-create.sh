@@ -20,6 +20,10 @@ gcloud run services update $K_SERVICE \
     --service-account $SA_EMAIL 
 stepdone
 
+stepdo "Creating cloud-builds topic (if it doesn't already exist)"
+gcloud pubsub topics create cloud-builds || true
+stepdone
+
 sed -e "s|SERVICE_URL|${SERVICE_URL}|" config-template.yaml > config.yaml
 
 stepdo "Cloning latest cloud-build-notifiers setup script"

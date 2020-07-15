@@ -26,6 +26,10 @@ gcloud config set project $GOOGLE_CLOUD_PROJECT
 gcloud config set run/platform managed
 gcloud config set run/region $GOOGLE_CLOUD_REGION
 
+stepdo "Enable additional Google Cloud APIs"
+gcloud services enable cloudbuild.googleapis.com
+stepdone
+
 stepdo "Creating dedicated service account for $K_SERVICE"
 gcloud iam service-accounts create $K_SERVICE \
   --display-name "$K_SERVICE service account"
