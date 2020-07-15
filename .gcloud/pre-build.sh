@@ -36,6 +36,9 @@ stepdone
 
 stepdo "Create Storage bucket"
 gsutil mb -l ${GOOGLE_CLOUD_REGION} gs://${BUCKET}
+stepdone
+
+stepdo "Grant service account admin access on Storage bucket"
 gsutil iam ch serviceAccount:${SA_EMAIL}:roles/storage.objectAdmin gs://${BUCKET}
 stepdone
 
