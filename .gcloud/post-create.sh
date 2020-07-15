@@ -20,11 +20,15 @@ gcloud run services update $K_SERVICE \
     --service-account $SA_EMAIL 
 stepdone
 
-echo "ℹ️  Use the following file for your cloud-build-notifier config.yaml: "
-echo ""
-sed -e "s|SERVICE_URL|${SERVICE_URL}|" ../config.yaml
-echo ""
+sed -e "s|SERVICE_URL|${SERVICE_URL}|" config-template.yaml > config.yaml
+
+stepdo "Retrieving latest cloud-build-notifiers setup script"
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-build-notifiers/master/setup.sh -o setup.sh
+chmod +x setup.sh
+stepdone
+
+stepdo "Running cloud-build-notifiers setup script"
+./setup.sh http config.yaml
+stepdone
 
 echo "Post-create configuration complete ✨"
-
-

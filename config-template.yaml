@@ -1,4 +1,3 @@
-# Replace SERVICE_URL with your deployed service
 apiVersion: cloud-build-notifiers/v1
 kind: HTTPNotifier
 metadata:
