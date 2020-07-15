@@ -1,6 +1,9 @@
 # Badge Receiver
 
+![Status badge](https://badge-receiver-ul5eoxp2iq-uc.a.run.app/badge/badge-receiver.svg)
+
 Designed to be the receiver for a HTTP [cloud-build-notifier](https://github.com/GoogleCloudPlatform/cloud-build-notifiers). 
+
 
 ## Deployment
 
