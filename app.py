@@ -16,7 +16,7 @@ def hi():
     return "HTTP 200 Beep Boop"
 
 def service_badge_uri(service):
-    return f"service/{service}/badge.svg"
+    return f"badge/{service}.svg"
 
 def service_badge_mimetype():
     return "image/svg+xml"
@@ -36,9 +36,12 @@ def receive():
     if not data:
         return "No data received", 400
 
+    # TODO: this presumes settings not all cloudbuild.yaml's have
+    # COULD use a step parser to see what the "gcloud run deploy X" value is
+    # or query back from the trigger ID
     service = get_sub(data, "_SERVICE", "service")
     label = service.replace("-","--")
-    commit = get_sub(data, "COMMIT_SHA", "commit")
+    commit = get_sub(data, "COMMIT_SHA", "manual")
     status = "success" if data["status"] == "SUCCESS" else "critical"
 
     badge_url = (f"https://img.shields.io/badge/{label}-{commit}-{status}"
