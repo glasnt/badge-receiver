@@ -22,13 +22,13 @@ stepdone
 
 sed -e "s|SERVICE_URL|${SERVICE_URL}|" config-template.yaml > config.yaml
 
-stepdo "Retrieving latest cloud-build-notifiers setup script"
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-build-notifiers/master/setup.sh -o setup.sh
-chmod +x setup.sh
+stepdo "Cloning latest cloud-build-notifiers setup script"
+git clone https://github.com/GoogleCloudPlatform/cloud-build-notifiers
+cd cloud-build-notifiers
 stepdone
 
 stepdo "Running cloud-build-notifiers setup script"
-./setup.sh http config.yaml
+./setup.sh http ../config.yaml
 stepdone
 
 echo "Post-create configuration complete ✨"
