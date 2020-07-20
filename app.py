@@ -6,7 +6,11 @@ import google.auth
 from datetime import datetime
 import httpx
 
+import logging
+
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
 client = storage.Client()
 _, project = google.auth.default()
 bucket = client.bucket(os.environ.get("BADGE_BUCKET", f"{project}-media"))
@@ -15,8 +19,25 @@ bucket = client.bucket(os.environ.get("BADGE_BUCKET", f"{project}-media"))
 def hi():
     return "HTTP 200 Beep Boop"
 
+
+# media bucket storage location (doesn't have to be nice)
 def service_badge_uri(service):
     return f"badge/{service}.svg"
+
+# nice URL
+@app.route("/badge/<name>.svg")
+def service_badge(name):
+    image = get_image(service_badge_uri(name))
+
+    return send_file(image, mimetype=service_badge_mimetype())
+
+def get_image(ident):
+    blob = bucket.blob(ident)
+    data = blob.download_as_string()
+    image = io.BytesIO()
+    image.write(data)
+    image.seek(0)
+    return image
 
 def service_badge_mimetype():
     return "image/svg+xml"
@@ -41,7 +62,7 @@ def receive():
     # or query back from the trigger ID
     service = get_sub(data, "_SERVICE", "service")
     label = service.replace("-","--")
-    commit = get_sub(data, "COMMIT_SHA", "manual")
+    commit = get_sub(data, "SHORT_SHA", "manual")
     status = "success" if data["status"] == "SUCCESS" else "critical"
 
     badge_url = (f"https://img.shields.io/badge/{label}-{commit}-{status}"
@@ -57,20 +78,10 @@ def receive():
 
     return "Success", 201
 
-@app.route("/service/<name>/badge.svg")
-def service_badge(name):
-    image = get_image(service_badge_uri(name))
-
-    return send_file(image, mimetype=service_badge_mimetype())
-
-
-def get_image(ident):
-    blob = bucket.blob(ident)
-    data = blob.download_as_string()
-    image = io.BytesIO()
-    image.write(data)
-    image.seek(0)
-    return image
+@app.route("/badge")
+def badge_list():
+    blobs =  list(bucket.list_blobs())
+    return "Known images: <li>" + "<li>".join([f"{x.name}" for x in blobs])
 
 
 if __name__ == "__main__":
