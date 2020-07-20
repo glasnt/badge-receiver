@@ -1,0 +1,19 @@
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📛</text></svg>">
+<title>Badge Status</title>
+<h1>Badge Status</h1>
+<style>
+  td { padding-left: 10px; padding-bottom: 5px;}
+</style>
+<table>
+<tr>
+  <th>Name</th><th>Image</th><th>Text</th><th>Last Updated</th><th>(relative time)</th>
+<tr>
+{% for badge in data %}
+<tr>
+  <td><a href="/{{badge.name}}">{{badge.name}}</a></td>
+  <td><img src="/{{badge.name}}"/></td>
+  <td>{{badge.data}}</td>
+  <td>{{badge.updated}}</td>
+  <td>{{badge.relative}}</td>
+</tr>
+{% endfor %}

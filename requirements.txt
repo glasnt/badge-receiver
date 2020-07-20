@@ -2,3 +2,6 @@ Flask
 httpx
 gunicorn
 google-cloud-storage
+bs4
+dateparser
+babel
