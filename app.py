@@ -1,5 +1,4 @@
 import io
-import logging
 import os
 from datetime import datetime
 
@@ -10,9 +9,10 @@ from babel.dates import format_timedelta
 from bs4 import BeautifulSoup as bs
 from flask import Flask, render_template, request, send_file
 from google.cloud import storage
+from logger import getJSONLogger
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logger = getJSONLogger("testLog")
 
 client = storage.Client()
 _, project = google.auth.default()
@@ -59,7 +59,7 @@ def receive():
     if not data:
         return "No data received", 400
 
-    app.logger.debug(data)
+    logger.debug(data)
 
     def get_sub(data, key, default):
         if "substitutions" in data.keys():
@@ -73,11 +73,11 @@ def receive():
             f"https://img.shields.io/badge/{label}-{message}-{color}"
             "?style=flat-square&logo=google-cloud&logoColor=white"
         )
-        app.logger.info(f"Badge URL: {badge_url}")
+        logger.info(f"Badge URL: {badge_url}")
         badge_blob = httpx.get(badge_url).content
         blob = storage.Blob(location, bucket=bucket)
         blob.upload_from_string(badge_blob, content_type=MIMETYPE)
-        app.logger.info(f"Badge uploaded to {blob.bucket.name} -- {blob.name}")
+        logger.info(f"Badge uploaded to {blob.bucket.name} -- {blob.name}")
 
     message = get_sub(data, "SHORT_SHA", "manual")
     color = "success" if data["status"] == "SUCCESS" else "critical"
