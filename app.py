@@ -83,8 +83,8 @@ def receive():
 
     message = get_sub(data, "SHORT_SHA", "manual")
     color = "success" if data["status"] == "SUCCESS" else "critical"
-    tags = data["tags"]
-    if tags:
+    if "tags" in data.keys()
+        tags = data["tags"]
         for t in tags:
             location = tag_badge_uri(t)
             store_badge(location, t, message, color)
