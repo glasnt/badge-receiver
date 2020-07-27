@@ -59,6 +59,8 @@ def receive():
         return "No data received", 400
 
 
+    app.logger.debug(data)
+
     def get_sub(data, key, default):
         if "substitutions" in data.keys():
             if key in data["substitutions"]:
@@ -86,10 +88,9 @@ def receive():
         for t in tags:
             location = tag_badge_uri(t)
             store_badge(location, t, message, color)
-    else:
-        service = get_sub(data, SERVICE_SUB, "service")
-        location = service_badge_uri(service)
-        store_badge(location, t, message, color)
+    service = get_sub(data, SERVICE_SUB, "service")
+    location = service_badge_uri(service)
+    store_badge(location, t, message, color)
 
     return "Success", 201
 
