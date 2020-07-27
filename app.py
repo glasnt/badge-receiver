@@ -17,8 +17,11 @@ logger = getJSONLogger("testLog")
 client = storage.Client()
 _, project = google.auth.default()
 bucket = client.bucket(os.environ.get("BADGE_BUCKET", f"{project}-media"))
+
 MIMETYPE = "image/svg+xml"
-SERVICE_SUB = "_SERVICE"  # _SERVICE_NAME
+
+# Create badges for the values in any of these substitutions, if declared
+SUBS = ["_SERVICE", "_SERVICE_NAME"]
 
 
 def service_badge_uri(service):
@@ -88,9 +91,11 @@ def receive():
             location = tag_badge_uri(t)
             store_badge(location=location, label=t, message=message, color=color)
 
-    service = get_sub(data, SERVICE_SUB, "service")
-    location = service_badge_uri(service)
-    store_badge(location=location, label=service, message=message, color=color)
+    for sub in SUBS:
+        service = get_sub(data, sub, None)
+        if service:
+            location = service_badge_uri(service)
+            store_badge(location=location, label=service, message=message, color=color)
 
     return "Success", 201
 

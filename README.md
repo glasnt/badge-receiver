@@ -1,6 +1,6 @@
 # Badge Receiver
 
-![Status badge](https://badge-receiver-ul5eoxp2iq-uc.a.run.app/badge/badge-receiver.svg)
+[![Status badge](https://badge-receiver-ul5eoxp2iq-uc.a.run.app/badge/badge-receiver.svg)](https://badge-receiver-ewtifq52za-uc.a.run.app/badges)
 
 Designed to be the receiver for a HTTP [cloud-build-notifier](https://github.com/GoogleCloudPlatform/cloud-build-notifiers). 
 
@@ -18,7 +18,23 @@ This will:
 
 ## Functionality
 
-TODO: document use
+For any Cloud Build job that is run on the project in which this project is deployed, a number of badges will be created: 
+
+ * Any Tags from the cloudbuild.yaml
+ * Any Substitutions from the declared list
+
+The badge will be created from the output of [shields.io](https://shields.io/#your-badge): 
+
+ * **Label**: The tag, or substitutions value, 
+ * **Message**: the short commit sha,
+ * **Success Color**: Green on success, Red on fail. 
+
+Example: ![badge sample](https://img.shields.io/badge/label-message-brightgreen)
+
+### Admin
+
+Navigating to `/badges` will show all the current badges in the storage bucket, including the last updated relative time.
+
 
 ## Local testing
 
