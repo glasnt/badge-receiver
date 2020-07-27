@@ -60,10 +60,10 @@ def receive():
 
 
     def get_sub(data, key, default):
-    if "substitutions" in data.keys():
-        if key in data["substitutions"]:
-            return data["substitutions"][key]
-    return default
+        if "substitutions" in data.keys():
+            if key in data["substitutions"]:
+                return data["substitutions"][key]
+        return default
 
 
     def store_badge(location, label,message,color):
