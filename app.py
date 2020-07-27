@@ -18,7 +18,7 @@ client = storage.Client()
 _, project = google.auth.default()
 bucket = client.bucket(os.environ.get("BADGE_BUCKET", f"{project}-media"))
 MIMETYPE = "image/svg+xml"
-SERVICE_SUB = "_SERVICE" #_SERVICE_NAME
+SERVICE_SUB = "_SERVICE"  # _SERVICE_NAME
 
 
 def service_badge_uri(service):
@@ -33,6 +33,7 @@ def service_badge(name):
 
 def tag_badge_uri(tag):
     return f"tag/{tag}.svg"
+
 
 @app.route("/tag/<name>.svg")
 def tag_badge(name):
@@ -58,7 +59,6 @@ def receive():
     if not data:
         return "No data received", 400
 
-
     app.logger.debug(data)
 
     def get_sub(data, key, default):
@@ -67,9 +67,8 @@ def receive():
                 return data["substitutions"][key]
         return default
 
-
-    def store_badge(location, label,message,color):
-        label = label.replace("-","_")
+    def store_badge(location, label, message, color):
+        label = label.replace("-", "_")
         badge_url = (
             f"https://img.shields.io/badge/{label}-{message}-{color}"
             "?style=flat-square&logo=google-cloud&logoColor=white"
@@ -80,10 +79,9 @@ def receive():
         blob.upload_from_string(badge_blob, content_type=MIMETYPE)
         app.logger.info(f"Badge uploaded to {blob.bucket.name} -- {blob.name}")
 
-
     message = get_sub(data, "SHORT_SHA", "manual")
     color = "success" if data["status"] == "SUCCESS" else "critical"
-    if "tags" in data.keys()
+    if "tags" in data.keys():
         tags = data["tags"]
         for t in tags:
             location = tag_badge_uri(t)
